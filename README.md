@@ -6,3 +6,10 @@
 ## 文獻
 
 + [Airflow Document](https://airflow.apache.org/docs/)
++ Docker
+    - [apache/airflow](https://hub.docker.com/r/apache/airflow)
+    - [docker](https://hub.docker.com/_/docker)
+    - [r-base](https://hub.docker.com/_/r-base)
+    - [tensorflow](https://www.tensorflow.org/install/docker?hl=zh-tw)
+    - [scikit-learn-intel](https://hub.docker.com/r/bitnami/scikit-learn-intel)
+    - [pytorch](https://hub.docker.com/r/pytorch/pytorch)
