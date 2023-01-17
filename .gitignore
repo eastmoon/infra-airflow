@@ -1,6 +1,7 @@
 # Project folder
 cache/
 .env
+*.pyc
 
 # third-party library
 
