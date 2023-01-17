@@ -37,7 +37,7 @@ docker pull apache/airflow
 + 啟動服務
 
 ```
-docker run -it --rm apache/airflow airflow webserver
+docker run -it --rm apache/airflow airflow standalone
 ```
 
 在 Docker 中，```AIRFLOW_HOME``` 預設在 ```/opt/airflow``` 中，其中 DAG 目錄在 ```/opt/airflow/dags``` 而執行記錄在 ```/opt/airflow/logs```。
@@ -48,11 +48,25 @@ docker run -it --rm apache/airflow airflow webserver
 docker exec -ti <container name> airflow info
 ```
 
-在文獻中，對於 Docker 的運用分為兩篇文獻，一篇是 [Docker 命令](https://airflow.apache.org/docs/docker-stack/entrypoint.html#entrypoint-commands) 的操作，適用於開發模式，另一篇為[使用 Docker-Compose 建立分散式應用服務](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html)。
+在文獻中，對於 Docker 的運用分為兩篇文獻，一篇是如上所述的 [Docker 命令](https://airflow.apache.org/docs/docker-stack/entrypoint.html#entrypoint-commands) 的操作，適用於開發模式，另一篇為[使用 Docker-Compose 建立分散式應用服務](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html)，建議使用於產品模式，其主要理由是建議將運算負責的 Executor、管理負責的 Scheduler、介面操作的 Webserver、工作觸法執行的 Triggerer、Metadata 資料庫、緩存服務全部改為獨立的服務容器並分開運作避免單一容器的效率降低與資安風險增加。
 
-在本專案中設計的命令介面區分如下：
+不過，對於 Docker-Compose 的設計，Executor、Scheduler、Webserver、Triggerer 實際都是 airflow 容器，以相同容器與設定區分開來運作，並在容器啟動時分別透過命令介面 ```airflow webserver```、```airflow scheduler```、```airflow celery worker```、```airflow triggerer``` 來啟動容器對應的服務內容。
 
-+ 開發模式
+關於單體與分散式運作概念，可以參考以下文獻說明：
+
++ [Airflow documnet : Celery Executor](https://airflow.apache.org/docs/apache-airflow/stable/executor/celery.html#architecture)
++ [Airflow document : Quick Start](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
++ [Airflow: what do `airflow webserver`, `airflow scheduler` and `airflow worker` exactly do?](https://stackoverflow.com/questions/51063151)
++ [Apache Airflow：工作流程管理控制台](https://tech.hahow.in/4dc8e6fc1a6a)
+
+![Airflow 元件通訊示意圖](./docs/img/airflow-celery-executor.png)
+> Reference : [How Apache Airflow Distributes Jobs on Celery workers](https://medium.com/sicara/54cb5212d405)
+
+由上圖與文獻所述，Airflow 的啟動是需要透過命令介面執行不同命令來開啟相對應服務，在適用開發模式的單體容器 ( Standalone )，雖然使用 ```airflow standalone```，但實際上內部仍是呼叫多個命令工作，而在產品模式的分散式結構中，則是各容器各自執行命令，在透過 Metadata 資料庫、Redis 緩存來進行 DAG 狀態改變，從而觸發各服務的運作。
+
+基於前述，本專案在安裝與啟動設計也區分為二，並依據需要建立如下對應命令介面：
+
+#### 開發模式
 
 ```
 airflow dev up
@@ -60,7 +74,7 @@ airflow dev down
 airflow dev into
 ```
 
-+ 產品模式
+#### 產品模式
 
 ```
 airflow prd up
