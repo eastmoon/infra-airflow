@@ -133,7 +133,7 @@ airflow tasks list <DAG id> --tree
 + 回填 ( Backfill )
 在 Airflow 中，測試屬於直接執行但並不會留存任何狀態於 Metadata 資料庫中，若要實際檢測，則需使用 Backfill，若使用此指令，則會實際讓 DAG 掛載後執行，並可在 Webserver 的介面中觀察執行進度
 ```
-airflow dags backfill <DAG id \
+airflow dags backfill <DAG id> \
     --start-date <YYYY-MM-DD> \
     --end-date <YYYY-MM-DD>
 ```
