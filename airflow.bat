@@ -184,7 +184,7 @@ goto end
         --env "_AIRFLOW_WWW_USER_USERNAME=airflow" ^
         --env "_AIRFLOW_WWW_USER_PASSWORD=airflow" ^
         --name "devel-airflow" ^
-        apache/airflow webserver
+        apache/airflow standalone
     goto end
 
 :cli-dev-up-args
