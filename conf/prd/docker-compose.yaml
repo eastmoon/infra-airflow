@@ -64,6 +64,8 @@ x-airflow-common:
     - ${SOURCE_LAGS_DIR}:/opt/airflow/logs
     - ${SOURCE_PLUG_DIR}:/opt/airflow/plugins
   user: "${AIRFLOW_UID:-50000}:0"
+  networks:
+    - airflow
   depends_on:
     &airflow-common-depends-on
     redis:
@@ -74,12 +76,15 @@ x-airflow-common:
 services:
   postgres:
     image: postgres:13
+    container_name: ${TAG}-postgres
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+    networks:
+      - airflow
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
@@ -88,8 +93,11 @@ services:
 
   redis:
     image: redis:latest
+    container_name: ${TAG}-redis
     expose:
       - 6379
+    networks:
+      - airflow
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -99,6 +107,7 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
+    container_name: ${TAG}-webserver
     command: webserver
     ports:
       - 8080:8080
@@ -115,6 +124,7 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
+    container_name: ${TAG}-scheduler
     command: scheduler
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
@@ -129,6 +139,7 @@ services:
 
   airflow-worker:
     <<: *airflow-common
+    container_name: ${TAG}-worker
     command: celery worker
     healthcheck:
       test:
@@ -150,6 +161,7 @@ services:
 
   airflow-triggerer:
     <<: *airflow-common
+    container_name: ${TAG}-triggerer
     command: triggerer
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
@@ -164,6 +176,7 @@ services:
 
   airflow-init:
     <<: *airflow-common
+    container_name: ${TAG}-init
     entrypoint: /bin/bash
     # yamllint disable rule:line-length
     command:
@@ -243,6 +256,7 @@ services:
 
   airflow-cli:
     <<: *airflow-common
+    container_name: ${TAG}-cli
     profiles:
       - debug
     environment:
@@ -259,6 +273,7 @@ services:
   # See: https://docs.docker.com/compose/profiles/
   flower:
     <<: *airflow-common
+    container_name: ${TAG}-flower
     command: celery flower
     profiles:
       - flower
@@ -277,3 +292,9 @@ services:
 
 volumes:
   postgres-db-volume:
+    name: ${TAG}-postgres-db-volume
+
+networks:
+  airflow:
+    name: ${TAG}-network
+    driver: bridge
