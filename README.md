@@ -24,7 +24,50 @@ Airflow 的工作流是一套基於 Python 定義的工作流，稱為 Workflows
 
 ![軟體架構示意圖](./docs/img/arch-diag-basic.png)
 
-## 安裝
+## 安裝與執行
+
+參考 [Installation](https://airflow.apache.org/docs/apache-airflow/stable/installation/index.html) 文件，安裝 Airflow 的必要環境是 Apache 與 Python，且安裝文件是基於 Linux 環境，若要運用於不同作業系統，則可考慮使用 [Docker 映像檔](https://airflow.apache.org/docs/docker-stack/index.html) 以服務方式啟動於作業系統。
+
++ 下載映象檔 [Docker hub - airflow](https://hub.docker.com/r/apache/airflow)
+
+```
+docker pull apache/airflow
+```
+
++ 啟動服務
+
+```
+docker run -it --rm apache/airflow airflow webserver
+```
+
+在 Docker 中，```AIRFLOW_HOME``` 預設在 ```/opt/airflow``` 中，其中 DAG 目錄在 ```/opt/airflow/dags``` 而執行記錄在 ```/opt/airflow/logs```。
+
++ 使用命令介面 [Command Line Interface Reference](https://airflow.apache.org/docs/apache-airflow/stable/cli-and-env-variables-ref.html)
+
+```
+docker exec -ti <container name> airflow info
+```
+
+在文獻中，對於 Docker 的運用分為兩篇文獻，一篇是 [Docker 命令](https://airflow.apache.org/docs/docker-stack/entrypoint.html#entrypoint-commands) 的操作，適用於開發模式，另一篇為[使用 Docker-Compose 建立分散式應用服務](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html)。
+
+在本專案中設計的命令介面區分如下：
+
++ 開發模式
+
+```
+airflow dev up
+airflow dev down
+airflow dev into
+```
+
++ 產品模式
+
+```
+airflow prd up
+airflow prd down
+airflow prd cli -c="airflow info"
+```
+> 產品模式使用的[設定檔](https://airflow.apache.org/docs/apache-airflow/2.5.0/docker-compose.yaml)來源於官方文件並進行適度修改，例如關閉下載範例、調整目錄位置等。
 
 ## 設計
 
@@ -33,7 +76,9 @@ Airflow 的工作流是一套基於 Python 定義的工作流，稱為 Workflows
 + [Airflow Document](https://airflow.apache.org/docs/)
     - [Overview](https://airflow.apache.org/docs/apache-airflow/stable/index.html)
     - [Architecture Overview](https://airflow.apache.org/docs/apache-airflow/stable/concepts/overview.html)
+        + [Concepts](https://airflow.apache.org/docs/apache-airflow/stable/concepts/index.html)
     - [Quick Start](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
+        + [Installation](https://airflow.apache.org/docs/apache-airflow/stable/installation/index.html)
 + Docker
     - [apache/airflow](https://hub.docker.com/r/apache/airflow)
     - [docker](https://hub.docker.com/_/docker)
