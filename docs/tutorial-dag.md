@@ -15,6 +15,8 @@ Airflow 的工作流是基於 DAG 設定，因此不同於其他框架是基於�
 
 + 任務 ( Tasks )
 若用 [Pipe & Filter](https://www.oreilly.com/library/view/software-architecture-with/9781786468529/ch08s04.html) 來解釋 Workflow，則 Pipe 就是 DAG，而 Filter 就是 Task，因此，在 DAG 要執行的實際內容便是 Task 的實體物件，詳細如何運用與建置 Task 於後設計範例說明。
+    - [airflow.operators](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/index.html)，在 AirFlow 的規劃中，Operators 是 DAG 執行的單元，而此提供的是系統內常用的操作單元。
+    - [airflow.sensors](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/sensors/index.html)，在 AirFlow 的規劃中，Sensors 是基於條件運作的單元，在滿足設定的條件前會持續執行；若觀察清單可知在 Sensors 內的單元也同樣存在於 Operators。
 
 + Jinja 樣板 ( Jinja Templating )
 Airflow 框架中已安裝 [Jinja](https://jinja.palletsprojects.com/) 套件，這是個基於 Python 語言的樣板套件，讓一段文字描述經過套件轉換成可用的文字、腳本，是早期的 SSR ( Server Side Render ) 技術，但也常運用於產生電子書；Airflow 則是可用此套件來產生如 DAG、Task 的說明文、BashOperator 的執行腳本，可以預期也可以用來產生動態的報告等用途。
