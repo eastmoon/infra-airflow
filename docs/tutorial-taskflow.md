@@ -45,7 +45,7 @@ def transform(order_data_dict: dict):
 函數化設計其優勢是可以利用事前宣告，讓不同的 DAG 可以共用相同的函數來做到相同的動作，以此減少重複性程式並提高維護效率，相關範例參考前述範例程式；需要注意 ```<task function>.override( ... )```，透過這個函數可以改寫或補充對 Task 的設定，但此函數並不存在於 Dag 的裝飾函數，因此 Dag 的設定屬於不可動態修改，若有要動態產生 Dag 則可參考前述的動態宣告與執行方式。
 
 + 複雜 Python 環境相依 ( complex/conflicting Python dependencies )
-在 Airflow 的架構中，每個任務都是獨立執行在 Worker 中，因此在執行任務時可依據需要引用不同的 Python 環境庫。
+在 Airflow 的架構中，每個任務都是獨立執行在 Worker 中，因此在執行任務時可依據需要引用不同的 Python 環境庫；在相依環境中還有 ```task.docker``` 與 ```task.kubernetes```，但文件說明中提到在 airflow 2.2、2.4 版本後這兩個功能已經被移除，改由 provider 替代。
 ```
 # 宣告要執行的環境，並匯入需要的相依庫 requirements
 @task.virtualenv( task_id="virtualenv_python", requirements=["colorama==0.4.0"], system_site_packages=False )
@@ -55,7 +55,6 @@ def callable_virtualenv():
 @task.external_python(task_id="external_python", python=PATH_TO_PYTHON_BINARY)
 def callable_external_python():
 ```
-在相依環境中還有 ```task.docker``` 與 ```task.kubernetes```，但文件說明中提到在 airflow 2.2、2.4 版本後這兩個功能已經被移除，改由 provider 替代。
 
 + 多重輸出 ( Multiple outputs )
 在 TaskFlow 中若函數回應為複數內容，如 dict 物件，則透過函數宣告，會自動偵測並將 ```multiple_outputs``` 設為 true；此數值本身可自行設定於 task 宣告中，但若自行設定，則自動偵測將會關閉。
