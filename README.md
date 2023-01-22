@@ -85,7 +85,7 @@ airflow prd cli -c="airflow info"
 
 ## 設計
 
-+ [基礎設計](./docs/tutorial-dag.md)
++ [基於 DAG 的基礎設計](./docs/tutorial-dag.md)
 
 ## 文獻
 
