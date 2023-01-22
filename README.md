@@ -86,6 +86,7 @@ airflow prd cli -c="airflow info"
 ## 設計
 
 #### 基礎設計
+> [範例程式](./dags/tutorial-dag.py)
 
 在 Airflow 文獻 [Fundamental Concepts](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/fundamentals.html) 中描述了 DAG 的基礎設計，其中要點區分如下：
 
