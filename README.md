@@ -87,6 +87,8 @@ airflow prd cli -c="airflow info"
 
 + [基於 DAG 的基礎設計](./docs/tutorial-dag.md)
 + [基於 TaskFlow 的函數導向設計](./docs/tutorial-taskflow.md)
++ [基於資料建立資料庫 - airflow document](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/pipeline.html)
+    - 此範例說明如何讀取 CSV 檔案並對 Postgres SQL 資料庫建立資料表與匯入資料
 
 ## 文獻
 
