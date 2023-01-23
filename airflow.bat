@@ -131,7 +131,7 @@ goto end
     echo.
     echo Command:
     echo      dev               Ariflow development mode.
-    echo      down              Airflow production mode.
+    echo      prd               Airflow production mode.
     echo.
     echo Run 'cli [COMMAND] --help' for more information on a command.
     goto end
