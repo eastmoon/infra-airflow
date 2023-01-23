@@ -99,6 +99,9 @@ airflow prd cli -c="airflow info"
         + [Concepts](https://airflow.apache.org/docs/apache-airflow/stable/concepts/index.html)
     - [Quick Start](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
         + [Installation](https://airflow.apache.org/docs/apache-airflow/stable/installation/index.html)
+    - [Integration](https://airflow.apache.org/docs/apache-airflow/stable/integration.html)
+    - [Providers Packages](https://airflow.apache.org/docs/apache-airflow-providers/index.html)
+        + [Providers list](https://airflow.apache.org/docs/#providers-packagesdocsapache-airflow-providersindexhtml)
 + Docker
     - [apache/airflow](https://hub.docker.com/r/apache/airflow)
     - [docker](https://hub.docker.com/_/docker)
