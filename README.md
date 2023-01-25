@@ -90,6 +90,7 @@ airflow prd cli -c="airflow info"
 + [群組化工作流設計](./docs/tutorial-groups.md)
 + [基於資料建立資料庫 - airflow document](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/pipeline.html)
     - 此範例說明如何讀取 CSV 檔案並對 Postgres SQL 資料庫建立資料表與匯入資料
++ [任務間通訊 XComs ( cross-communications )](./docs/tutorial-xcoms.md)
 
 ## 文獻
 
