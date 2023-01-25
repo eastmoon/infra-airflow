@@ -91,6 +91,19 @@ airflow prd cli -c="airflow info"
 + [基於資料建立資料庫 - airflow document](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/pipeline.html)
     - 此範例說明如何讀取 CSV 檔案並對 Postgres SQL 資料庫建立資料表與匯入資料
 + [任務間通訊 XComs ( cross-communications )](./docs/tutorial-xcoms.md)
++ [執行 DAG - airflow document](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html)
+    - 使用基於 [cron expression](https://en.wikipedia.org/wiki/Cron#CRON_expression) 觸發的 schedule
+    - 透過 AirFlow CLI 執行 [Backfill](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#backfill) 與 [Triggers](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dag-run.html#external-triggers)
+    - 使用 WebUI 來執行執行 Trigger
++ [使用者介面 - airflow document](https://airflow.apache.org/docs/apache-airflow/stable/ui.html)、[Airflow User Interface: 5 Critical Components](https://hevodata.com/learn/airflow-user-interface/)
+    - DAGs View 是用來呈現所有 DAG 的狀態，若要過濾 DAG 則可使用 DAG 定義的標籤 ( Tag ) 篩選
+        + Runs、Recent Tasks 欄位下面的圓圈代表著此 DAG 與 DAG 中 Task 的執行狀態與次數
+    - Datasets View 是用來呈現 DAG 產生的資料集關係圖
+    - Grid View 是用來呈現 DAG 的執行狀態，細節面板可以顯示單次 DAG 執行的狀態細節，亦可選擇單次 DAG 中的任務來查看任務的細節資訊
+    - Graph View  是用圖像呈現 DAG 中任務的關係圖
+    - Calendar View 是使用日曆形式來呈現 DAG 在整年中執行的狀況
+    - Variable View 是呈現整個 AirFlow 中可使用的全域變數資訊
++ Providers 與 Docker
 
 ## 文獻
 
