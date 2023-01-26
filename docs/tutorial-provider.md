@@ -19,3 +19,35 @@
 
 + [Community Providers](https://airflow.apache.org/docs/apache-airflow-providers/howto/create-update-providers.html)
     - [Airflow Sample Provider](https://github.com/astronomer/airflow-provider-sample)
+
+而依據上述文獻中 Provider 結構的描述，不同的 Provider 會提供不同的內容，但總體可分為下列四類。
+
+### [Hook](https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/connections.html)
+
++ [Airflow Hooks Explained 101: A Complete Guide](https://hevodata.com/learn/airflow-hooks/)
++ [Airflow hooks](https://docs.astronomer.io/learn/what-is-a-hook)
+
+Hook 是一種擴增服務提供的通訊物件，常用於需要通訊的擴增服務，如 S3、Docker，在透過 UI 介面定義好的通訊資訊後，DAG 可以藉由定義時填寫的 HOOK_ID 來取回通訊物件，並藉由其提供的操作進行通訊以取回資訊；在運用上，Hook 所在的任務 ( Task ) 多半本身不作為通訊操作，而是在其運作流程中透過 Hook 進行通訊操作。
+
+### [Operators](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/operators.html)
+
++ [101 Guide on Apache Airflow Operators](https://censius.ai/blogs/apache-airflow-operators-guide)
+
+Operator 是 AirFlow 中創建任務的生成函數，在 AirFlow 系統中有諸多用於系統操作、檔案操作的 Operator，這些生成物件會將操作行為隱含在其中；因此，用於擴展功能的 Provider 也會提供隱含其操作的 Operator 來生成任務單元。
+
+### [Sensors](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/sensors.html)
+
++ [Airflow Sensors : What you need to know](https://marclamberti.com/blog/airflow-sensors/)
+
+Sensor 是一種在指定執行區間內，有條件執行的 Operator，常用於指定時間內檢查是否可以通訊，倘若條件失敗，在時間內仍會繼續嘗試連線；對於連線不穩定或需要等待時間的遠端服務來說，會以此種方式來避免因為一次性連線異常導致處理失敗。
+
+### [Transfers](https://airflow.apache.org/docs/apache-airflow-providers-google/stable/operators/transfer/index.html)
+
++ [Generic Airflow Transfers made easy](https://medium.com/apache-airflow/5fe8e5e7d2c2)
+
+Transfer 是一種用來讓來源與目標間的資料傳輸的 Operator，會提供此類 Operator 的 Provider 主要是雲端存儲相關的服務，如 GCP、S3、HIVE。
+
+
+### [Decorator](https://airflow.apache.org/docs/apache-airflow/stable/howto/create-custom-decorator.html)
+
+有些 Provider 會提供裝飾函數，以便在 TaskFlow 中使用，其用途相似 Operators，但其用途應是使用裝飾的函數其內容是要直接引用到 Provider 內。
