@@ -103,7 +103,7 @@ airflow prd cli -c="airflow info"
     - Graph View  是用圖像呈現 DAG 中任務的關係圖
     - Calendar View 是使用日曆形式來呈現 DAG 在整年中執行的狀況
     - Variable View 是呈現整個 AirFlow 中可使用的全域變數資訊
-+ Providers 與 Docker
++ [Providers](./docs/tutorial-provider.md)
 
 ## 文獻
 
@@ -116,6 +116,9 @@ airflow prd cli -c="airflow info"
     - [Integration](https://airflow.apache.org/docs/apache-airflow/stable/integration.html)
     - [Providers Packages](https://airflow.apache.org/docs/apache-airflow-providers/index.html)
         + [Providers list](https://airflow.apache.org/docs/#providers-packagesdocsapache-airflow-providersindexhtml)
++ Introduction
+    - [An introduction to Apache Airflow](https://docs.astronomer.io/learn/intro-to-airflow)
+    - [What Is Apache Airflow?](https://www.run.ai/guides/machine-learning-operations/apache-airflow)
 + Docker
     - [apache/airflow](https://hub.docker.com/r/apache/airflow)
     - [docker](https://hub.docker.com/_/docker)
