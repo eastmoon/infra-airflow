@@ -104,6 +104,7 @@ airflow prd cli -c="airflow info"
     - Calendar View 是使用日曆形式來呈現 DAG 在整年中執行的狀況
     - Variable View 是呈現整個 AirFlow 中可使用的全域變數資訊
 + [Providers](./docs/tutorial-provider.md)
+    - [docker provider](./docs/tutorial-provider-docker.md)
 
 ## 文獻
 

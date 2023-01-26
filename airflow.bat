@@ -173,9 +173,31 @@ goto end
     IF NOT EXIST %CLI_DIRECTORY%\cache\plugins (
         mkdir %CLI_DIRECTORY%\cache\plugins
     )
+    IF NOT EXIST %CLI_DIRECTORY%\cache\docker-crets (
+        mkdir %CLI_DIRECTORY%\cache\docker-crets\ca
+        mkdir %CLI_DIRECTORY%\cache\docker-crets\client
+    )
     @rem create server
+    docker network create --driver=bridge airflow-dev-network
+    docker run -d --rm ^
+        --privileged ^
+      	-e DOCKER_TLS_CERTDIR=/certs ^
+      	-v %CLI_DIRECTORY%\cache\docker-crets\ca:/certs/ca ^
+      	-v %CLI_DIRECTORY%\cache\docker-crets\client:/certs/client ^
+      	--network airflow-dev-network ^
+        --network-alias docker ^
+        --name "devel-airflow-docker" ^
+      	docker:dind
     docker run -d --rm ^
         -p 8080:8080 ^
+        -e DOCKER_HOST=tcp://docker:2376 ^
+        -e DOCKER_CERT_PATH=/certs/client ^
+        -e DOCKER_TLS_VERIFY=1 ^
+      	-v %CLI_DIRECTORY%\cache\docker-crets\client:/certs/client:ro ^
+        -e AIRFLOW_VAR_DOCKER_HOST=tcp://docker:2376 ^
+        -e AIRFLOW_VAR_DOCKER_CRET_CA=/certs/client/ca.pem ^
+        -e AIRFLOW_VAR_DOCKER_CLIENT_CERT=/certs/client/cert.pem ^
+        -e AIRFLOW_VAR_DOCKER_CLIENT_KEY=/certs/client/key.pem ^
         -v %CLI_DIRECTORY%\dags:/opt/airflow/dags^
         -v %CLI_DIRECTORY%\cache\logs:/opt/airflow/logs^
         -v %CLI_DIRECTORY%\cache\plugins:/opt/airflow/plugins^
@@ -183,6 +205,8 @@ goto end
         --env "_AIRFLOW_WWW_USER_CREATE=true" ^
         --env "_AIRFLOW_WWW_USER_USERNAME=airflow" ^
         --env "_AIRFLOW_WWW_USER_PASSWORD=airflow" ^
+      	--network airflow-dev-network ^
+        --network-alias airflow ^
         --name "devel-airflow" ^
         apache/airflow standalone
     goto end
@@ -202,6 +226,8 @@ goto end
 
 :cli-dev-down
     docker rm -f devel-airflow
+    docker rm -f devel-airflow-docker
+    docker network remove airflow-dev-network
     goto end
 
 :cli-dev-down-args
