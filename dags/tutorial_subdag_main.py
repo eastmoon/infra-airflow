@@ -5,7 +5,7 @@ from datetime import datetime
 ## Airflow core library
 from airflow import DAG
 from airflow.operators.subdag import SubDagOperator
-from tutorial_taskflow_reusing import add_task
+from tutorial_common_task import add_task
 from tutorial_subdag_sub import subdag
 # [END import_module]
 

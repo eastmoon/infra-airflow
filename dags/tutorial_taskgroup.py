@@ -4,7 +4,7 @@ from datetime import datetime
 
 ## Airflow core library
 from airflow.decorators import dag, task_group
-from tutorial_taskflow_reusing import add_task
+from tutorial_common_task import add_task
 # [END import_module]
 
 # [START declare_taskgroup]

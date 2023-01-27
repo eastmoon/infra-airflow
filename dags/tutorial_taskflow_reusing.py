@@ -18,13 +18,13 @@ def add_task(x, y):
 def mydag1():
     start = add_task.override(task_id="start")(1, 2)
     for i in range(3):
-        start >> add_task.override(task_id=f"add_start_{i}")(start, i)
+        start >> add_task.override(task_id=f"add_start_{i}")(i, i+1)
 
 @dag(dag_id = "reusing_dag_2", start_date=datetime(2022, 1, 1))
 def mydag2():
     start = add_task(1, 2)
     for i in range(3):
-        start >> add_task.override(task_id=f"new_add_task_{i}")(start, i)
+        start >> add_task.override(task_id=f"new_add_task_{i}")(i, i+2)
 # [END declare_dag]
 
 # [START instantiate_dag]

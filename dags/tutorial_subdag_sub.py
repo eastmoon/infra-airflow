@@ -4,7 +4,7 @@ import pendulum
 
 ## Airflow core library
 from airflow import DAG
-from tutorial_taskflow_reusing import add_task
+from tutorial_common_task import add_task
 # [END import_module]
 
 # [START declare_subdag_function]

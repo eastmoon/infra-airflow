@@ -4,7 +4,7 @@ from datetime import datetime
 
 ## Airflow core library
 from airflow.decorators import dag
-from tutorial_taskflow_reusing import add_task
+from tutorial_common_task import add_task
 # [END import_module]
 
 # [START declare_dag]
@@ -12,7 +12,7 @@ from tutorial_taskflow_reusing import add_task
 def use_add_task():
     start = add_task.override(priority_weight=3)(1, 2)
     for i in range(3):
-        start >> add_task.override(task_id=f"new_add_task_{i}", retries=4)(start, i)
+        start >> add_task.override(task_id=f"new_add_task_{i}", retries=4)(i, i+1)
 # [END declare_dag]
 
 # [START instantiate_dag]
