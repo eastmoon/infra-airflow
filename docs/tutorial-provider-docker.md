@@ -14,7 +14,7 @@ Docker 供應者是 Apache AirFlow 中的一個 Provider，其主要用途是讓
 + DockerOperator
 + DockerSwarmOperator
 
-對於本專案所需研究的是，在此架構下如何運用 Docker 引入不同的演算法容器，以避免套件安裝導致容器服務複雜化。
+對於本專案所需研究的是，在此架構下如何運用 Docker 引入不同演算法容器，以避免套件安裝導致容器服務複雜化。
 
 ## 建立 Docker in Docker
 
@@ -63,9 +63,8 @@ docker exec -ti devel-airflow bash -c "docker version"
 
 ## 執行 DockerOperator
 
-+ [範例程式](../dags/tutorial_provider_docker.py)
-
-因上述範例僅有一個任務，可以使用 CLI 進行測試 ```airflow tasks test tutorial-provider-docker call-docker-container```，與一般文件設定不同。
++ [範例程式 - 執行 DockerOperator](../dags/tutorial_provider_docker_run.py)
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-build call-docker-run```。
 
 ```
 DockerOperator(
@@ -85,4 +84,70 @@ DockerOperator(
 
 ## 編譯 Dockerfile
 
-## 執行 Docker
++ [範例程式 - Bash 與 DockerOperator](../dags/tutorial_provider_docker_build.py)
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-build call-docker-build```。
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-build call-docker-run-with-bash```。
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-build call-docker-run-with-docker```。
++ [範例程式 - TaskFlow 與 docker module](../dags/tutorial_provider_docker_module.py)
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-module call-docker-client```。
+
+透過 DockerOperator 操作時，若欲執行的服務映象檔不存在目標 Docker Daemon 服務器中，則會自行前往官方 Docker Registry ( Docker Hub ) 下載後才運行；但實務上，更多服務會需要透過 Dockerfile 下載服務映象檔後安裝額外的功能，而這就會需要對目標 Docker Daemon 執行 ```docker build``` 指令。
+
+然而 AirFlow 中的 Docker provider 並沒有提供建置的 API 操作，因此，有三個設計方式參考
+
++ 利用 AirFlow 的 BashOperator 執行 ```docker``` 指令並對目標 Docker Daemon 操作。
+
+```
+BashOperator(task_id="call-docker-build", bash_command="docker build -t test-docker ${AIRFLOW_HOME}/docker/bash")
+```
+
++ 利用 Pythom 匯入 DockerOperator 封裝的操作模組，並執行[建置介面](BashOperator(task_id="call-docker-build", bash_command="docker build -t test-docker ${AIRFLOW_HOME}/docker/bash"))
+
+這部分操作需建立一個 TaskFlow 並直接操作 docker 模組的連線建立，再依據此連線服務來操控對應的介面。
+
++ 利用 Docker 服務器建立時，一次性完成所需的服務映象檔
+
+這部分操作假設 Docker Daemon 為 docker-in-docker 或可以自行管理的服務主機，在流程執行前事先完成服務映像檔建置。
+
+## 執行 Docker 掛載目錄
+
++ [範例程式 - 掛載目錄](../dags/tutorial_provider_docker_build.py)
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-run-with-voulme create-tmpfile```。
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-run-with-voulme call-docker-run-with-bash```。
+    - CLI 進行測試 ```airflow tasks test tutorial-provider-docker-run-with-voulme call-docker-run-with-docker```。
+
+對於遠端控制的 Docker Daemon，不論是 docker-in-docker 或是遠端伺服器，當你宣告掛載目錄時，都是以目標服務器的目錄來掛載，因此，在使用時需要注意以下幾點
+
++ 若使用 ```docker run -v /local-path:/container-path``` 指令，掛載目錄必須本地與遠端皆存在。
+
+在使用以上指令時，由於會檢查本地目錄，若存在才會將命令通知遠端主計並掛起目錄，因此，在 docker-in-docker 中也可以讓 AirFlow 與 Docker Daemon 共享相同目錄來達成操作。
+
++ 使用 ```docker run --mount``` 指令，僅需遠端存在目錄。
+
+此操作放式也是 DockerOperator 中所描述的動作。
+
+**If you know you run DockerOperator with remote engine or via docker-in-docker you should set ``mount_tmp_dir`` parameter to False. In this case, you can still use ``mounts`` parameter to mount already existing named volumes in your Docker Engine to achieve similar capability where you can store files exceeding default disk size of the container**
+
+若換成指令則如下所示
+
+```
+from docker.types import Mount
+DockerOperator(
+    task_id="call-docker-run-with-docker",
+    docker_url=Variable.get("DOCKER_HOST"),
+    tls_ca_cert=Variable.get("DOCKER_CRET_CA"),
+    tls_client_cert=Variable.get("DOCKER_CLIENT_CERT"),
+    tls_client_key=Variable.get("DOCKER_CLIENT_KEY"),
+    command="ls -al /tmp2",
+    image="bash",
+    auto_remove="success",
+    mount_tmp_dir=False,
+    mounts=[
+        Mount(
+            source='/var/local/docker',
+            target='/tmp2',
+            type='bind'
+        )
+    ],
+)
+```
