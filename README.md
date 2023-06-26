@@ -112,6 +112,7 @@ airflow prd cli -c="airflow info"
     - [Overview](https://airflow.apache.org/docs/apache-airflow/stable/index.html)
     - [Architecture Overview](https://airflow.apache.org/docs/apache-airflow/stable/concepts/overview.html)
         + [Concepts](https://airflow.apache.org/docs/apache-airflow/stable/concepts/index.html)
+        + [Apache Airflow Architecture](https://towardsdatascience.com/496b9cb28288)
     - [Quick Start](https://airflow.apache.org/docs/apache-airflow/stable/start.html)
         + [Installation](https://airflow.apache.org/docs/apache-airflow/stable/installation/index.html)
     - [Integration](https://airflow.apache.org/docs/apache-airflow/stable/integration.html)
@@ -120,6 +121,7 @@ airflow prd cli -c="airflow info"
 + Introduction
     - [An introduction to Apache Airflow](https://docs.astronomer.io/learn/intro-to-airflow)
     - [What Is Apache Airflow?](https://www.run.ai/guides/machine-learning-operations/apache-airflow)
+    - [Three Helpful Tips to Know Before Choosing Apache Airflow As a Workflow Management Platform](https://towardsdatascience.com/42dc4073ae11)
 + Docker
     - [apache/airflow](https://hub.docker.com/r/apache/airflow)
     - [docker](https://hub.docker.com/_/docker)
