@@ -119,6 +119,7 @@ airflow prd cli -c="airflow info"
     - [Providers Packages](https://airflow.apache.org/docs/apache-airflow-providers/index.html)
         + [Providers list](https://airflow.apache.org/docs/#providers-packagesdocsapache-airflow-providersindexhtml)
 + Introduction
+    - [Apache Airflow - handwiki](https://handwiki.org/wiki/Software:Apache_Airflow)
     - [An introduction to Apache Airflow](https://docs.astronomer.io/learn/intro-to-airflow)
     - [What Is Apache Airflow?](https://www.run.ai/guides/machine-learning-operations/apache-airflow)
     - [Three Helpful Tips to Know Before Choosing Apache Airflow As a Workflow Management Platform](https://towardsdatascience.com/42dc4073ae11)
@@ -129,3 +130,5 @@ airflow prd cli -c="airflow info"
     - [tensorflow](https://www.tensorflow.org/install/docker?hl=zh-tw)
     - [scikit-learn-intel](https://hub.docker.com/r/bitnami/scikit-learn-intel)
     - [pytorch](https://hub.docker.com/r/pytorch/pytorch)
++ Compare
+    - [Apache airflow vs Apache nifi](https://ithelp.ithome.com.tw/articles/10281489)
